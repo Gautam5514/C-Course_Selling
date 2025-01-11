@@ -1,12 +1,10 @@
-
-import { useState } from "react";
+import  { useState } from "react";
 import logo from "../../public/logo.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-
-
-function Signup() {
+import { BACKEND_URL } from "../utils/utils";
+function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -19,7 +17,7 @@ function Signup() {
 
         try {
             const response = await axios.post(
-                "http://localhost:3005/api/v1/user/login",
+                `${BACKEND_URL}/user/login`,
                 {
                     email,
                     password,
@@ -31,12 +29,13 @@ function Signup() {
                     },
                 }
             );
-            console.log("Sugnup successful: ", response.data);
+            console.log("Login successful: ", response.data);
             toast.success(response.data.message);
+            localStorage.setItem("user", JSON.stringify(response.data));
             navigate("/");
         } catch (error) {
             if (error.response) {
-                setErrorMessage(error.response.data.errors || "Signup failed!!!");
+                setErrorMessage(error.response.data.errors || "Login failed!!!");
             }
         }
     };
@@ -54,10 +53,10 @@ function Signup() {
                     </div>
                     <div className="flex items-center space-x-4">
                         <Link
-                            to={"/login"}
+                            to={"/signup"}
                             className="bg-transparent border border-gray-500 p-1 text-sm md:text-md md:py-2 md:px-4 rounded-md"
                         >
-                            Login
+                            Signup
                         </Link>
                         <Link
                             to={"/courses"}
@@ -68,17 +67,16 @@ function Signup() {
                     </div>
                 </header>
 
-                {/* Signup Form */}
+                {/* Login Form */}
                 <div className="bg-gray-900 p-8 rounded-lg shadow-lg w-[500px] m-8 md:m-0 mt-20">
                     <h2 className="text-2xl font-bold mb-4 text-center">
                         Welcome to <span className="text-orange-500">RK Center</span>
                     </h2>
                     <p className="text-center text-gray-400 mb-6">
-                        Just Signup To Join Us!
+                        Log in to access paid content!
                     </p>
 
                     <form onSubmit={handleSubmit}>
-
                         <div className="mb-4">
                             <label htmlFor="email" className=" text-gray-400 mb-2">
                                 Email
@@ -118,7 +116,7 @@ function Signup() {
                             type="submit"
                             className="w-full bg-orange-500 hover:bg-blue-600 text-white py-3 px-6 rounded-md transition"
                         >
-                            Signup
+                            Login
                         </button>
                     </form>
                 </div>
@@ -127,4 +125,4 @@ function Signup() {
     );
 }
 
-export default Signup;
+export default Login;

@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
 import config from "../config.js";
-import { Admin } from "../models/admin.models.js";
+import { Admin } from "../models/admin.model.js";
 
 export const signup = async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
@@ -82,9 +82,7 @@ export const login = async (req, res) => {
 
 export const logout = (req, res) => {
     try {
-        if(!req.cookies.jwt) {
-            return res.status(403).json({ errors: "Kindly login first" });
-        }   
+
         res.clearCookie("jwt");
         res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {
